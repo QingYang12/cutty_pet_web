@@ -1,16 +1,13 @@
 <template>
   <div class="app-container">
-    <h1>员工管理页</h1>
+    <h1>客户收养宠物记录页</h1>
     <div class="filter-container">
-      <span style=""><b>账号:</b></span><el-input  v-model="listQuery.username" placeholder="账号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
-      <span><b>电话号:</b></span><el-input v-model="listQuery.telephone" placeholder="电话号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
-      <span><b>年龄:</b></span><el-input v-model="listQuery.old" placeholder="年龄" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
-      <span><b>角色:</b></span><el-input v-model="listQuery.role" placeholder="角色" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
+      <span style=""><b>收养单号:</b></span><el-input  v-model="listQuery.adoptOrderId" placeholder="账号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
+      <span><b>宠物code:</b></span><el-input v-model="listQuery.petCode" placeholder="电话号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
+      <span><b>收养时间:</b></span><el-input v-model="listQuery.adoptTime" placeholder="年龄" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
+      <span><b>收养人账号:</b></span><el-input v-model="listQuery.adoptUsername" placeholder="角色" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
-      </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        新增
       </el-button>
     </div>
 
@@ -29,40 +26,32 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="姓名" prop="username" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="收养单号" prop="adoptOrderId" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.username }}</span>
+          <span>{{ row.adoptOrderId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="密码" prop="password" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="宠物code" prop="petCode" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.password }}</span>
+          <span>{{ row.petCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="电话号" prop="telephone" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="收养时间" prop="adoptTime" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.telephone }}</span>
+          <span>{{ row.adoptTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="年龄" prop="old" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="收养人账号" prop="adoptUsername" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.old }}</span>
+          <span>{{ row.adoptUsername }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色" prop="role" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="救助备注" prop="adoptRemark" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.role }}</span>
+          <span>{{ row.adoptRemark }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
-          </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
-            删除
-          </el-button>
-        </template>
       </el-table-column>
     </el-table>
 
@@ -73,20 +62,20 @@
         <el-form-item label="ID" prop="id">
           <el-input v-model="temp.id"  disabled placeholder="自动生成"/>
         </el-form-item>
-        <el-form-item label="姓名" prop="username">
-          <el-input v-model="temp.username" />
+        <el-form-item label="收养单号" prop="adoptOrderId">
+          <el-input v-model="temp.adoptOrderId" />
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="temp.password" />
+        <el-form-item label="宠物code" prop="petCode">
+          <el-input v-model="temp.petCode" />
         </el-form-item>
-        <el-form-item label="电话号" prop="telephone">
-          <el-input v-model="temp.telephone" />
+        <el-form-item label="收养时间" prop="adoptTime">
+          <el-input v-model="temp.adoptTime" />
         </el-form-item>
-        <el-form-item label="年龄" prop="old">
-          <el-input v-model="temp.old" />
+        <el-form-item label="收养人账号" prop="adoptUsername">
+          <el-input v-model="temp.adoptUsername" />
         </el-form-item>
-        <el-form-item label="角色" prop="role">
-          <el-input v-model="temp.role" />
+        <el-form-item label="收养备注" prop="adoptRemark">
+          <el-input v-model="temp.adoptRemark" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -112,7 +101,7 @@
 </template>
 
 <script>
-import { fetchUserList, fetchUser,deleteUser, createUser, updateUser } from '@/api/pet'
+import { fetchadoptRecordHistoryList,  createAdopt } from '@/api/pet'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -160,11 +149,11 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        username: '',
-        password: '',
-        telephone: '',
-        old: '',
-        role: '',
+        adoptOrderId: '',
+        petCode: '',
+        adoptTime: '',
+        adoptUsername: '',
+        adoptRemark: '',
       },
       importanceOptions: [1, 2, 3],
       calendarTypeOptions,
@@ -173,11 +162,11 @@ export default {
       showReviewer: false,
       temp: {
         id: undefined,
-        username: undefined,
-        password: undefined,
-        telephone: undefined,
-        old: undefined,
-        role: undefined
+        adoptOrderId: undefined,
+        petCode: undefined,
+        adoptTime: undefined,
+        adoptUsername: undefined,
+        adoptRemark: undefined,
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -205,7 +194,7 @@ export default {
       this.listLoading = true
       this.listQuery.pageNum=this.listQuery.page;
       this.listQuery.pageSize=this.listQuery.limit;
-      fetchUserList(this.listQuery).then(response => {
+      fetchadoptRecordHistoryList(this.listQuery).then(response => {
         
         this.list = response.pageDate.data;
         this.total = response.total;
@@ -236,11 +225,11 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        username: undefined,
-        password: undefined,
-        telephone: undefined,
-        old: undefined,
-        role: undefined
+        adoptOrderId: undefined,
+        petCode: undefined,
+        adoptTime: undefined,
+        adoptUsername: undefined,
+        adoptRemark: undefined,
       }
     },
     handleCreate() {
@@ -254,7 +243,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          createUser(this.temp).then(() => {
+          createAdopt(this.temp).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: 'Success',

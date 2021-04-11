@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h1>员工管理页</h1>
+    <h1>主页</h1>
     <div class="filter-container">
       <span style=""><b>账号:</b></span><el-input  v-model="listQuery.username" placeholder="账号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
       <span><b>电话号:</b></span><el-input v-model="listQuery.telephone" placeholder="电话号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />

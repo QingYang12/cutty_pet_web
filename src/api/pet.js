@@ -22,8 +22,9 @@ export function createDic(data) {
   return request({
     url: '/dictionary/insert',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8'
     },
+    dataType: 'json',
     method: 'post',
     data
   })
@@ -33,10 +34,11 @@ export function deleteDic(id) {
   return request({
     url: '/dictionary/delete',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8'
     },
+    dataType: 'json',
     method: 'post',
-    data: { id }
+    data:  id 
   })
 }
 //修改宠物字典         1   API003
@@ -44,8 +46,9 @@ export function updateDic(data) {
   return request({
     url: '/dictionary/update',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8'
     },
+    dataType: 'json',
     method: 'post',
     data
   })
@@ -55,8 +58,9 @@ export function fetchDicList(query) {
   return request({
     url: '/dictionary/queryByPage',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8'
     },
+    dataType: 'json',
     method: 'post',
     data: query
   })
@@ -67,8 +71,9 @@ export function createUser(data) {
   return request({
     url: '/user/insert',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8'
     },
+    dataType: 'json',
     method: 'post',
     data
   })
@@ -78,10 +83,11 @@ export function deleteUser(id) {
   return request({
     url: '/user/delete',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8'
     },
+    dataType: 'json',
     method: 'post',
-    data: { id }
+    data:  id 
   })
 }
 //改管理员             1   API0014
@@ -89,8 +95,9 @@ export function updateUser(data) {
   return request({
     url: '/user/update',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8'
     },
+    dataType: 'json',
     method: 'post',
     data
   })
@@ -109,8 +116,9 @@ export function createcustomer(data) {
   return request({
     url: '/customer/insert',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8'
     },
+    dataType: 'json',
     method: 'post',
     data
   })
@@ -120,10 +128,35 @@ export function fetchcustomerList(query) {
   return request({
     url: '/customer/queryByPage',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8'
     },
+    dataType: 'json',
     method: 'post',
     data: query
+  })
+}
+//删顾客             1   API0016
+export function deleteCustomer(id) {
+  return request({
+    url: '/customer/delete',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    dataType: 'json',
+    method: 'post',
+    data:  id 
+  })
+}
+//改顾客             1   API0017
+export function updateCustomer(data) {
+  return request({
+    url: '/customer/update',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    dataType: 'json',
+    method: 'post',
+    data
   })
 }
 //petStorage
@@ -132,8 +165,9 @@ export function fetchpetStorageList(query) {
   return request({
     url: '/petStorage/searchPet',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8'
     },
+    dataType: 'json',
     method: 'post',
     data: query
   })
@@ -144,8 +178,9 @@ export function createAdopt(query) {
   return request({
     url: '/adoptRecordHistory/customerAdopt',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8'
     },
+    dataType: 'json',
     method: 'post',
     data: query
   })
@@ -155,8 +190,9 @@ export function fetchadoptRecordHistoryList(query) {
   return request({
     url: '/adoptRecordHistory/queryByPage',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8'
     },
+    dataType: 'json',
     method: 'post',
     data: query
   })
@@ -167,8 +203,9 @@ export function createSuccour(query) {
   return request({
     url: '/succourRecordHistory/sitSuccour',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8'
     },
+    dataType: 'json',
     method: 'post',
     data: query
   })
@@ -178,8 +215,9 @@ export function fetchsuccourRecordHistoryList(query) {
   return request({
     url: '/succourRecordHistory/queryByPage',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8'
     },
+    dataType: 'json',
     method: 'post',
     data: query
   })

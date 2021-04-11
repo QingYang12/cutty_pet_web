@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h1>员工管理页</h1>
+    <h1>顾客管理页</h1>
     <div class="filter-container">
       <span style=""><b>账号:</b></span><el-input  v-model="listQuery.username" placeholder="账号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
       <span><b>电话号:</b></span><el-input v-model="listQuery.telephone" placeholder="电话号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import { fetchUserList, fetchUser,deleteUser, createUser, updateUser } from '@/api/pet'
+import { fetchcustomerList, deleteCustomer, createcustomer, updateCustomer } from '@/api/pet'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -205,7 +205,7 @@ export default {
       this.listLoading = true
       this.listQuery.pageNum=this.listQuery.page;
       this.listQuery.pageSize=this.listQuery.limit;
-      fetchUserList(this.listQuery).then(response => {
+      fetchcustomerList(this.listQuery).then(response => {
         
         this.list = response.pageDate.data;
         this.total = response.total;
@@ -254,7 +254,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          createUser(this.temp).then(() => {
+          createcustomer(this.temp).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: 'Success',
@@ -279,7 +279,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          updateUser(this.temp).then(() => {
+          updateCustomer(this.temp).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: 'Success',
@@ -293,7 +293,7 @@ export default {
       })
     },
     handleDelete(row, index) {
-      deleteUser(row.id).then(() => {
+      deleteCustomer(row.id).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: 'Success',
