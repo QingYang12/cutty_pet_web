@@ -2,15 +2,12 @@
   <div class="app-container">
     <h1>主页</h1>
     <div class="filter-container">
-      <span style=""><b>账号:</b></span><el-input  v-model="listQuery.username" placeholder="账号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
-      <span><b>电话号:</b></span><el-input v-model="listQuery.telephone" placeholder="电话号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
-      <span><b>年龄:</b></span><el-input v-model="listQuery.old" placeholder="年龄" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
-      <span><b>角色:</b></span><el-input v-model="listQuery.role" placeholder="角色" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
+      <span style=""><b>宠物代号:</b></span><el-input  v-model="listQuery.petCode" placehpetTypeer="宠物代号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
+      <span><b>宠物详细类型:</b></span><el-input v-model="listQuery.petStyle" placehpetTypeer="宠物详细类型" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
+      <span><b>宠物种类:</b></span><el-input v-model="listQuery.petType" placehpetTypeer="宠物种类" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
+      <span><b>宠物简称:</b></span><el-input v-model="listQuery.name" placehpetTypeer="宠物简称" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
-      </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        新增
       </el-button>
     </div>
 
@@ -29,38 +26,42 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="姓名" prop="username" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="宠物代号" prop="petCode" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.username }}</span>
+          <span>{{ row.petCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="密码" prop="password" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="宠物图片" prop="imgSearch" sortable="custom" align="center"  :class-name="getSortClass('id')" >
         <template slot-scope="{row}">
-          <span>{{ row.password }}</span>
+          <div style="width:80px;height:80px;margin:auto;" align="center">
+            <img :id=row.id :src='imgformatter(row)' style="width:100%;height:100%margin:auto;" align="center"/>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column label="电话号" prop="telephone" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="宠物详细类型" prop="petStyle" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.telephone }}</span>
+          <span>{{ row.petStyle }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="年龄" prop="old" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="宠物种类" prop="petType" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.old }}</span>
+          <span>{{ row.petType }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色" prop="role" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="宠物简称" prop="name" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.role }}</span>
+          <span>{{ row.name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="宠物数量" prop="petNumber" sortable="custom" align="center"  :class-name="getSortClass('id')">
+        <template slot-scope="{row}">
+          <span>{{ row.petNumber }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
-          </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
-            删除
+          <el-button type="primary" size="mini" @click="handlegointo(row,$index)">
+            查看宠物详情
           </el-button>
         </template>
       </el-table-column>
@@ -68,51 +69,11 @@
 
     <pagination v-show="this.total>0" :total="this.total" :page.sync="this.listQuery.page" :limit.sync="this.listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="ID" prop="id">
-          <el-input v-model="temp.id"  disabled placeholder="自动生成"/>
-        </el-form-item>
-        <el-form-item label="姓名" prop="username">
-          <el-input v-model="temp.username" />
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="temp.password" />
-        </el-form-item>
-        <el-form-item label="电话号" prop="telephone">
-          <el-input v-model="temp.telephone" />
-        </el-form-item>
-        <el-form-item label="年龄" prop="old">
-          <el-input v-model="temp.old" />
-        </el-form-item>
-        <el-form-item label="角色" prop="role">
-          <el-input v-model="temp.role" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          取消
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          提交
-        </el-button>
-      </div>
-    </el-dialog>
-
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchUserList, fetchUser,deleteUser, createUser, updateUser } from '@/api/pet'
+import { fetchpetStorageList, downLoad } from '@/api/pet'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -160,25 +121,17 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        username: '',
+        petCode: '',
         password: '',
-        telephone: '',
-        old: '',
-        role: '',
+        petStyle: '',
+        petType: '',
+        name: '',
       },
       importanceOptions: [1, 2, 3],
       calendarTypeOptions,
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
-      temp: {
-        id: undefined,
-        username: undefined,
-        password: undefined,
-        telephone: undefined,
-        old: undefined,
-        role: undefined
-      },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -205,7 +158,7 @@ export default {
       this.listLoading = true
       this.listQuery.pageNum=this.listQuery.page;
       this.listQuery.pageSize=this.listQuery.limit;
-      fetchUserList(this.listQuery).then(response => {
+      fetchpetStorageList(this.listQuery).then(response => {
         
         this.list = response.pageDate.data;
         this.total = response.total;
@@ -233,83 +186,24 @@ export default {
       }
       this.handleFilter()
     },
-    resetTemp() {
-      this.temp = {
-        id: undefined,
-        username: undefined,
-        password: undefined,
-        telephone: undefined,
-        old: undefined,
-        role: undefined
-      }
-    },
-    handleCreate() {
-      this.resetTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
+    
+     imgformatter(row){
+          downLoad(row.imgSearch).then(response => {
+          var fileSrc="";
+           fileSrc =   response.data.fileSrc;
+           //debugger
+          //var htmls='<img src="'+fileSrc+'" style="float:right;">';
+          document.getElementById(row.id).src=fileSrc;
+          
+          return fileSrc;
       })
+      
     },
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          createUser(this.temp).then(() => {
-            this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: 'Created Successfully',
-              type: 'success',
-              duration: 2000
-            })
-            this.getList()
-          })
-        }
-      })
+    
+    handlegointo(row,index) {
+      this.$router.push({name:'detail',params:row});
     },
-    handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          updateUser(this.temp).then(() => {
-            this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: 'Update Successfully',
-              type: 'success',
-              duration: 2000
-            })
-            this.getList()
-          })
-        }
-      })
-    },
-    handleDelete(row, index) {
-      deleteUser(row.id).then(() => {
-            this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: 'Delete Successfully',
-              type: 'success',
-              duration: 2000
-            })
-            this.getList()
-          })
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
+    
     formatJson(filterVal) {
       return this.list.map(v => filterVal.map(j => {
         if (j === 'timestamp') {

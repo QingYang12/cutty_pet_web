@@ -15,6 +15,12 @@ import request from '@/utils/request'
 删管理员             1   API0013    /user/delete
 改管理员             1   API0014    /user/update
 查管理员             1   API0015    /user/queryByPage
+顾客修改             1   API0016    /customer/update
+顾客删除             1   API0017    /customer/delete
+文件上传             1   API0018    /upLoadFile/upLoad
+文件查询             1   API0019    /upLoadFile/selectOne
+文件删除             1   API0020    /upLoadFile/delete
+文件下载             1   API0021    /upLoadFile/downLoad
 */
 //dic
 //新增宠物字典         1   API002
@@ -220,5 +226,17 @@ export function fetchsuccourRecordHistoryList(query) {
     dataType: 'json',
     method: 'post',
     data: query
+  })
+}
+
+//文件下载 1  API0021    
+export async function downLoad(query) {
+  return await request({
+    url: '/upLoadFile/downLoad?id='+query,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    dataType: 'json',
+    method: 'get'
   })
 }

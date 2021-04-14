@@ -61,24 +61,24 @@
     <pagination v-show="this.total>0" :total="this.total" :page.sync="this.listQuery.page" :limit.sync="this.listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="90px" style="width: 400px; margin-left:50px;">
         <el-form-item label="ID" prop="id">
           <el-input v-model="temp.id"  disabled placeholder="自动生成"/>
         </el-form-item>
         <el-form-item label="救助单号" prop="succourOrderId">
-          <el-input v-model="temp.succourOrderId" />
+          <el-input v-model="temp.succourOrderId"  disabled placeholder="自动生成" />
         </el-form-item>
         <el-form-item label="宠物code" prop="petCode">
           <el-input v-model="temp.petCode" />
         </el-form-item>
         <el-form-item label="救助时间" prop="succourTime">
-          <el-input v-model="temp.succourTime" />
+          <el-date-picker v-model="temp.succourTime"  type="datetime" placeholder="选择日期时间"  :picker-options="pickerOptions"/>
         </el-form-item>
         <el-form-item label="救助人账号" prop="succourUsername">
           <el-input v-model="temp.succourUsername" />
         </el-form-item>
         <el-form-item label="救助备注" prop="succourRemark">
-          <el-input v-model="temp.succourRemark" />
+          <el-input v-model="temp.succourRemark"  type="textarea"   placeholder="请输入描述"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -184,7 +184,30 @@ export default {
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
-      downloadLoading: false
+      downloadLoading: false,
+      //时间日期快捷
+       pickerOptions: {
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        },
     }
   },
   created() {

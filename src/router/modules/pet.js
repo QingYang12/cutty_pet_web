@@ -44,12 +44,6 @@ const tableRouter = {
       meta: { title: '客户收养宠物管理' }
     },
     {
-      path: 'personal',
-      component: () => import('@/views/pet/personal'),
-      name: 'personal',
-      meta: { title: '个人中心' }
-    },
-    {
       path: 'pet_index',
       component: () => import('@/views/pet/pet_index'),
       name: 'pet_index',
@@ -60,6 +54,12 @@ const tableRouter = {
       component: () => import('@/views/pet/detail'),
       name: 'detail',
       meta: { title: '宠物详情页' }
+    },
+    {
+      path: 'personal',
+      component: () => import('@/views/pet/personal'),
+      name: 'personal',
+      meta: { title: '个人中心' }
     }
   ]
 }

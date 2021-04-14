@@ -2,18 +2,23 @@
   <div class="app-container">
     <h1>个人中心</h1>
     <div class="filter-container">
-      <span style=""><b>账号:</b></span><el-input  v-model="listQuery.username" placeholder="账号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
-      <span><b>电话号:</b></span><el-input v-model="listQuery.telephone" placeholder="电话号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
-      <span><b>年龄:</b></span><el-input v-model="listQuery.old" placeholder="年龄" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
-      <span><b>角色:</b></span><el-input v-model="listQuery.role" placeholder="角色" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        搜索
-      </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        新增
-      </el-button>
+      <div style="width:100%height:200px">
+            <div id="imgSearch"  style="width:200px;height:200px;float:left;background-image:url('/img/pan2.png');background-size:100% 100%;">
+              
+            </div>
+            <div style="width:500px;height:200px;float:left;">
+              <span>账号:</span><span id="username"></span><br>
+              <span>电话号:</span><span id="telephone"></span><br>
+              <span>年龄:</span><span id="old"></span><br>
+              <span>荣誉称号:</span><span id="honorTitle"></span><br>
+              <span>荣誉等级:</span><span id="honorLevel"></span><br>
+            </div>
+      </div>
+      <div style="width:100%height:200px;">
+        <h3>个人收养记录</h3>
+      </div>
     </div>
-
+    
     <el-table
       :key="tableKey"
       v-loading="listLoading"
@@ -29,90 +34,40 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="姓名" prop="username" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="收养单号" prop="adoptOrderId" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.username }}</span>
+          <span>{{ row.adoptOrderId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="密码" prop="password" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="宠物code" prop="petCode" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.password }}</span>
+          <span>{{ row.petCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="电话号" prop="telephone" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="收养时间" prop="adoptTime" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.telephone }}</span>
+          <span>{{ row.adoptTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="年龄" prop="old" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="收养人账号" prop="adoptUsername" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.old }}</span>
+          <span>{{ row.adoptUsername }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色" prop="role" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="救助备注" prop="adoptRemark" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.role }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
-          </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
-            删除
-          </el-button>
+          <span>{{ row.adoptRemark }}</span>
         </template>
       </el-table-column>
     </el-table>
 
     <pagination v-show="this.total>0" :total="this.total" :page.sync="this.listQuery.page" :limit.sync="this.listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="ID" prop="id">
-          <el-input v-model="temp.id"  disabled placeholder="自动生成"/>
-        </el-form-item>
-        <el-form-item label="姓名" prop="username">
-          <el-input v-model="temp.username" />
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="temp.password" />
-        </el-form-item>
-        <el-form-item label="电话号" prop="telephone">
-          <el-input v-model="temp.telephone" />
-        </el-form-item>
-        <el-form-item label="年龄" prop="old">
-          <el-input v-model="temp.old" />
-        </el-form-item>
-        <el-form-item label="角色" prop="role">
-          <el-input v-model="temp.role" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          取消
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          提交
-        </el-button>
-      </div>
-    </el-dialog>
-
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchUserList, fetchUser,deleteUser, createUser, updateUser } from '@/api/pet'
+import { fetchUserList, fetchadoptRecordHistoryList } from '@/api/pet'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -157,6 +112,7 @@ export default {
       header:[
         {}
       ],
+      honorTitle: ["爱宠小白","爱宠小白","爱宠平民","爱心公众人物","爱心大使","爱宠王子","宠物王国国王","救世主","救世主+","救世主++","救世主+++","救世主+++"],
       listQuery: {
         page: 1,
         limit: 20,
@@ -202,18 +158,30 @@ export default {
   },
   methods: {
     getList() {
+      var self=this;
       this.listLoading = true
-      this.listQuery.pageNum=this.listQuery.page;
-      this.listQuery.pageSize=this.listQuery.limit;
+      this.listQuery.pageNum=1;
+      this.listQuery.pageSize=1;
+      //设置账号
       fetchUserList(this.listQuery).then(response => {
-        
+         var personal= response.pageDate.data[0];
+         document.getElementById("username").innerHTML=personal.username;
+         document.getElementById("telephone").innerHTML=personal.telephone;
+         document.getElementById("old").innerHTML=personal.old;
+      })
+      var param={};
+      param.pageNum=this.listQuery.page;
+      param.pageSize=this.listQuery.limit;
+      //设置账号
+      fetchadoptRecordHistoryList(param).then(response => {
         this.list = response.pageDate.data;
         this.total = response.total;
-        // Just to simulate the time of the request
+        self.honorset(self.total);
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
       })
+      
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -322,6 +290,37 @@ export default {
     getSortClass: function(key) {
       const sort = this.listQuery.sort
       return sort === `+${key}` ? 'ascending' : 'descending'
+    },
+    honorset(total){
+      debugger
+      var level=1;
+      var honor="";
+      if(total<=1){//1
+        level=1;
+      }else if (total<=3){//2
+        level=2;
+      }else if (total<=5){//3
+        level=3;
+      }else if (total<=10){//4
+        level=4;
+      }else if (total<=10){//5
+        level=5;
+      }else if (total<=20){//6
+        level=6;
+      }else if (total<=30){//7
+        level=7;
+      }else if (total<=50){//8
+        level=8;
+      }else if (total<=100){//9
+        level=9;
+      }else if (total<=200){//10
+        level=10;
+      }else{
+        level=10;
+      }
+      honor=this.honorTitle[level];
+      document.getElementById("honorTitle").innerHTML=honor;
+      document.getElementById("honorLevel").innerHTML=level;
     }
   }
 }
