@@ -44,6 +44,7 @@ export const constantRoutes = [
     path: '/redirect',
     component: Layout,
     hidden: true,
+    
     children: [
       {
         path: '/redirect/:path(.*)',
@@ -78,13 +79,13 @@ export const constantRoutes = [
     children: [
       {
         path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
+        component: () => import('@/views/pet/pet_index'),
         name: 'Dashboard',
         meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
       }
     ]
   },
-  {
+  /*{
     path: '/documentation',
     component: Layout,
     children: [
@@ -122,7 +123,7 @@ export const constantRoutes = [
         meta: { title: 'Profile', icon: 'user', noCache: true }
       }
     ]
-  }
+  }*/
 ]
 
 /**
@@ -130,7 +131,7 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  {
+  /*{
     path: '/permission',
     component: Layout,
     redirect: '/permission/page',
@@ -183,16 +184,16 @@ export const asyncRoutes = [
         meta: { title: 'Icons', icon: 'icon', noCache: true }
       }
     ]
-  },
+  },*/
 
   /** when your routing map is too long, you can split it into small modules **/
-  componentsRouter,
-  chartsRouter,
-  nestedRouter,
-  tableRouter,
+  //componentsRouter,
+  //chartsRouter,
+  //nestedRouter,
+  //tableRouter,
   petRouter,
 
-  {
+  /*{
     path: '/example',
     component: Layout,
     redirect: '/example/list',
@@ -383,7 +384,7 @@ export const asyncRoutes = [
         meta: { title: 'External Link', icon: 'link' }
       }
     ]
-  },
+  },*/
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

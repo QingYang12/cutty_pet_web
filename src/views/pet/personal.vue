@@ -292,7 +292,6 @@ export default {
       return sort === `+${key}` ? 'ascending' : 'descending'
     },
     honorset(total){
-      debugger
       var level=1;
       var honor="";
       if(total<=1){//1

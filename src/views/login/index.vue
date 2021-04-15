@@ -166,7 +166,9 @@ export default {
         if (valid) {
           this.loading = true
           vo.param=this.loginForm;
-          fetchUserList(vo).then(response => {
+          //fetchUserList(vo)
+          this.$store.dispatch('user/login', this.loginForm)
+          .then(response => {
               self.$router.push({ path: self.redirect || '/', query: self.otherQuery })
               this.loading = false
           })
