@@ -1,8 +1,16 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" >
     <h1>主页</h1>
     <div class="filter-container">
-      <span style=""><b>宠物代号:</b></span><el-input  v-model="listQuery.petCode" placehpetTypeer="宠物代号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
+      <span style=""><b>宠物code:</b></span>
+      <el-select v-model="listQuery.petCode" clearable placeholder="请选择" style="width: 200px;margin-right:50px;">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
       <span><b>宠物详细类型:</b></span><el-input v-model="listQuery.petStyle" placehpetTypeer="宠物详细类型" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
       <span><b>宠物种类:</b></span><el-input v-model="listQuery.petType" placehpetTypeer="宠物种类" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
       <span><b>宠物简称:</b></span><el-input v-model="listQuery.name" placehpetTypeer="宠物简称" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
@@ -73,7 +81,7 @@
 </template>
 
 <script>
-import { fetchpetStorageList, downLoad } from '@/api/pet'
+import { fetchpetStorageList, downLoad,fetchDicList } from '@/api/pet'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -118,6 +126,13 @@ export default {
       header:[
         {}
       ],
+      options: [{
+          value: '选项1',
+          label: '选项1'
+        }, {
+          value: '选项2',
+          label: '选项2'
+        }],
       listQuery: {
         page: 1,
         limit: 20,
@@ -150,15 +165,20 @@ export default {
   },
   created() {
     this.getList()
+    this.getdicList()
   },
   mounted(){
+    this.getList()
+    this.getdicList()
   },
   methods: {
     getList() {
       this.listLoading = true
-      this.listQuery.pageNum=this.listQuery.page;
-      this.listQuery.pageSize=this.listQuery.limit;
-      fetchpetStorageList(this.listQuery).then(response => {
+      var params={};
+      params.pageNum=this.listQuery.page;
+      params.pageSize=this.listQuery.limit;
+      params.param=this.listQuery;
+      fetchpetStorageList(params).then(response => {
         
         this.list = response.pageDate.data;
         this.total = response.total;
@@ -166,6 +186,23 @@ export default {
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
+      })
+    },
+    getdicList() {
+      this.listLoading = true
+      var params={};
+      params.pageNum=1;
+      params.pageSize=20000;
+      fetchDicList(params).then(response => {
+        var diclist=[];
+        var data = response.pageDate.data;
+        for(var i=0;i<=data.length-1;i++){
+          var item={};
+          item.value=data[i].code;
+          item.label=data[i].code +":  "+data[i].name;
+          diclist.push(item);
+        }
+        this.options=diclist;
       })
     },
     handleFilter() {

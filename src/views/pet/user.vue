@@ -9,7 +9,7 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
         新增
       </el-button>
     </div>
@@ -29,7 +29,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="姓名" prop="username" sortable="custom" align="center"  :class-name="getSortClass('id')">
+      <el-table-column label="账号" prop="username" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.username }}</span>
         </template>
@@ -73,8 +73,8 @@
         <el-form-item label="ID" prop="id">
           <el-input v-model="temp.id"  disabled placeholder="自动生成"/>
         </el-form-item>
-        <el-form-item label="姓名" prop="username">
-          <el-input v-model="temp.username" />
+        <el-form-item label="账号" prop="username">
+          <el-input v-model="temp.username" :disabled="this.usernameDisable" />
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input v-model="temp.password" />
@@ -150,6 +150,7 @@ export default {
  
   data() {
     return {
+      usernameDisable:0,
       tableKey: 0,
       list: [],
       total: 0,
@@ -159,7 +160,7 @@ export default {
       ],
       listQuery: {
         page: 1,
-        limit: 20,
+        limit: 5000,
         username: '',
         password: '',
         telephone: '',
@@ -203,9 +204,11 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      this.listQuery.pageNum=this.listQuery.page;
-      this.listQuery.pageSize=this.listQuery.limit;
-      fetchUserList(this.listQuery).then(response => {
+      var params={};
+      params.pageNum=this.listQuery.page;
+      params.pageSize=this.listQuery.limit;
+      params.param=this.listQuery;
+      fetchUserList(params).then(response => {
         
         this.list = response.pageDate.data;
         this.total = response.total;
@@ -247,6 +250,7 @@ export default {
       this.resetTemp()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
+      this.usernameDisable=0;
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
@@ -272,6 +276,7 @@ export default {
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
+      this.usernameDisable=1;
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })

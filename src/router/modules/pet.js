@@ -42,7 +42,7 @@ const tableRouter = {
       path: 'adopt_record_history',
       component: () => import('@/views/pet/adopt_record_history'),
       name: 'adopt_record_history',
-      meta: { title: '客户收养宠物管理',roles: ['admin', 'editor'] }
+      meta: { title: '客户收养宠物管理',roles: ['admin'] }
     },
     {
       path: 'pet_index',

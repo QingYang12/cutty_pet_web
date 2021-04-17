@@ -2,14 +2,22 @@
   <div class="app-container">
     <h1>站点救助宠物记录页</h1>
     <div class="filter-container">
-      <span style=""><b>救助单号:</b></span><el-input  v-model="listQuery.succourOrderId" placeholder="账号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
-      <span><b>宠物code:</b></span><el-input v-model="listQuery.petCode" placeholder="电话号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
-      <span><b>救助时间:</b></span><el-input v-model="listQuery.succourTime" placeholder="年龄" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
-      <span><b>救助人账号:</b></span><el-input v-model="listQuery.succourUsername" placeholder="角色" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
+      <span style=""><b>救助单号:</b></span><el-input  v-model="listQuery.succourOrderId" placeholder="救助单号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
+      <span style=""><b>宠物code:</b></span>
+      <el-select v-model="listQuery.petCode" clearable placeholder="请选择" style="width: 200px;margin-right:50px;">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+      <span><b>救助时间:</b></span><el-date-picker v-model="listQuery.succourTime" placeholder="选择日期时间" style="width: 200px;margin-right:50px;"  type="datetime"  :picker-options="pickerOptions" clearable/>
+      <span><b>救助人账号:</b></span><el-input v-model="listQuery.succourUsername" placeholder="救助人账号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
         新增
       </el-button>
     </div>
@@ -34,10 +42,7 @@
           <span>{{ row.succourOrderId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="宠物code" prop="petCode" sortable="custom" align="center"  :class-name="getSortClass('id')">
-        <template slot-scope="{row}">
-          <span>{{ row.petCode }}</span>
-        </template>
+      <el-table-column label="宠物code" prop="petCode" sortable="custom" align="center"  :formatter="statusFormatter"  :class-name="getSortClass('id')">
       </el-table-column>
       <el-table-column label="救助时间" prop="succourTime" sortable="custom" align="center"  :class-name="getSortClass('id')">
         <template slot-scope="{row}">
@@ -55,6 +60,11 @@
         </template>
       </el-table-column>
       <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
+        <template slot-scope="{row}">
+          <el-button type="primary" size="mini" @click="handlelook(row)">
+            查看
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
 
@@ -69,7 +79,14 @@
           <el-input v-model="temp.succourOrderId"  disabled placeholder="自动生成" />
         </el-form-item>
         <el-form-item label="宠物code" prop="petCode">
-          <el-input v-model="temp.petCode" />
+          <el-select v-model="temp.petCode" clearable placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="救助时间" prop="succourTime">
           <el-date-picker v-model="temp.succourTime"  type="datetime" placeholder="选择日期时间"  :picker-options="pickerOptions"/>
@@ -78,16 +95,10 @@
           <el-input v-model="temp.succourUsername" />
         </el-form-item>
         <el-form-item label="救助备注" prop="succourRemark">
-          <el-input v-model="temp.succourRemark"  type="textarea"   placeholder="请输入描述"/>
+          <el-input v-model="temp.succourRemark"  type="textarea" rows='10'  placeholder="请输入描述"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          取消
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          提交
-        </el-button>
       </div>
     </el-dialog>
 
@@ -104,7 +115,7 @@
 </template>
 
 <script>
-import { fetchsuccourRecordHistoryList, deleteUser, createSuccour, updateUser } from '@/api/pet'
+import { fetchsuccourRecordHistoryList, deleteUser, createSuccour, updateUser,fetchDicList } from '@/api/pet'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -149,6 +160,13 @@ export default {
       header:[
         {}
       ],
+      options: [{
+          value: '选项1',
+          label: '选项1'
+        }, {
+          value: '选项2',
+          label: '选项2'
+        }],
       listQuery: {
         page: 1,
         limit: 20,
@@ -212,15 +230,20 @@ export default {
   },
   created() {
     this.getList()
+    this.getdicList()
   },
   mounted(){
+    this.getList()
+    this.getdicList()
   },
   methods: {
     getList() {
       this.listLoading = true
-      this.listQuery.pageNum=this.listQuery.page;
-      this.listQuery.pageSize=this.listQuery.limit;
-      fetchsuccourRecordHistoryList(this.listQuery).then(response => {
+      var params={};
+      params.pageNum=this.listQuery.page;
+      params.pageSize=this.listQuery.limit;
+      params.param=this.listQuery;
+      fetchsuccourRecordHistoryList(params).then(response => {
         
         this.list = response.pageDate.data;
         this.total = response.total;
@@ -228,6 +251,23 @@ export default {
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
+      })
+    },
+    getdicList() {
+      this.listLoading = true
+      var params={};
+      params.pageNum=1;
+      params.pageSize=20000;
+      fetchDicList(params).then(response => {
+        var diclist=[];
+        var data = response.pageDate.data;
+        for(var i=0;i<=data.length-1;i++){
+          var item={};
+          item.value=data[i].code;
+          item.label=data[i].code +":  "+data[i].name;
+          diclist.push(item);
+        }
+        this.options=diclist;
       })
     },
     handleFilter() {
@@ -337,6 +377,21 @@ export default {
     getSortClass: function(key) {
       const sort = this.listQuery.sort
       return sort === `+${key}` ? 'ascending' : 'descending'
+    },
+    handlelook(row){
+      this.dialogFormVisible = true;
+      this.temp=row;
+    },
+    statusFormatter(row, column) {
+        var a=row.petCode;
+        var b="";
+        for(var i=0;i<=this.options.length-1;i++){
+          if(row.petCode==this.options[i].value){
+            b=this.options[i].label;
+          }
+        }
+        var s=b
+        return s;
     }
   }
 }

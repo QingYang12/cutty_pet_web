@@ -7,7 +7,7 @@ export function login(data) {
     data
   })
 }
-
+//根据token查用户信息             1   API0024
 export function getInfo(token) {
   return request({
     url: '/user/info',

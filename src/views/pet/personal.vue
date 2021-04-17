@@ -67,10 +67,11 @@
 </template>
 
 <script>
-import { fetchUserList, fetchadoptRecordHistoryList } from '@/api/pet'
+import { fetchUserList, fetchadoptRecordHistoryList,tokenfetchUser } from '@/api/pet'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { getToken } from '@/utils/auth'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -159,28 +160,39 @@ export default {
   methods: {
     getList() {
       var self=this;
-      this.listLoading = true
-      this.listQuery.pageNum=1;
-      this.listQuery.pageSize=1;
-      //设置账号
-      fetchUserList(this.listQuery).then(response => {
-         var personal= response.pageDate.data[0];
-         document.getElementById("username").innerHTML=personal.username;
-         document.getElementById("telephone").innerHTML=personal.telephone;
-         document.getElementById("old").innerHTML=personal.old;
+      const hasToken = getToken()
+      tokenfetchUser(hasToken).then(response => {
+         var usernames= response.data.username;
+          self.listLoading = true
+          self.listQuery.pageNum=1;
+          self.listQuery.pageSize=1;
+          //设置账号
+          self.listQuery.username=usernames;
+          fetchUserList(self.listQuery).then(response => {
+            var personal= response.pageDate.data[0];
+            document.getElementById("username").innerHTML=personal.username;
+            document.getElementById("telephone").innerHTML=personal.telephone;
+            document.getElementById("old").innerHTML=personal.old;
+          })
+          var params={param:{}};
+          params.pageNum=self.listQuery.page;
+          params.pageSize=self.listQuery.limit;
+          //设置账号
+          params.param.adoptUsername=usernames;
+          fetchadoptRecordHistoryList(params).then(response => {
+            self.list = response.pageDate.data;
+            self.total = response.total;
+            self.honorset(self.total);
+            setTimeout(() => {
+              self.listLoading = false
+            }, 1.5 * 1000)
+          })
       })
-      var param={};
-      param.pageNum=this.listQuery.page;
-      param.pageSize=this.listQuery.limit;
-      //设置账号
-      fetchadoptRecordHistoryList(param).then(response => {
-        this.list = response.pageDate.data;
-        this.total = response.total;
-        self.honorset(self.total);
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
-      })
+
+
+
+
+      
       
     },
     handleFilter() {

@@ -3,14 +3,14 @@
     <h1>宠物字典管理</h1>
     <div class="filter-container">
       <span><b>业务类型:</b></span><el-input  v-model="listQuery.businessType"  style="width: 200px;margin-right:50px;" class="filter-item"  disabled />
-      <span><b>宠物代称:</b></span><el-input  v-model="listQuery.name" placeholder="账号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
-      <span><b>宠物代号:</b></span><el-input v-model="listQuery.code" placeholder="电话号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
-      <span><b>宠物详细类型:</b></span><el-input v-model="listQuery.petStyle" placeholder="年龄" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
-      <span><b>宠物种类:</b></span><el-input v-model="listQuery.petType" placeholder="角色" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
+      <span><b>宠物代称:</b></span><el-input  v-model="listQuery.name" placeholder="宠物代称" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
+      <span><b>宠物代号:</b></span><el-input v-model="listQuery.code" placeholder="宠物代号" style="width: 200px;margin-right:50px;" class="filter-item"  clearable />
+      <span><b>宠物详细类型:</b></span><el-input v-model="listQuery.petStyle" placeholder="宠物详细类型" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
+      <span><b>宠物种类:</b></span><el-input v-model="listQuery.petType" placeholder="宠物种类" style="width: 200px;margin-right:50px;" class="filter-item"  clearable/>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
         新增
       </el-button>
     </div>
@@ -314,9 +314,11 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      this.listQuery.pageNum=this.listQuery.page;
-      this.listQuery.pageSize=this.listQuery.limit;
-      fetchDicList(this.listQuery).then(response => {
+      var params={};
+      params.pageNum=this.listQuery.page;
+      params.pageSize=this.listQuery.limit;
+      params.param=this.listQuery;
+      fetchDicList(params).then(response => {
         
         this.list = response.pageDate.data;
         this.total = response.total;

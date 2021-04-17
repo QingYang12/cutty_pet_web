@@ -240,3 +240,13 @@ export async function downLoad(query) {
     method: 'get'
   })
 }
+
+
+//根据token查用户信息             1   API0024
+export function tokenfetchUser(token) {
+  return request({
+    url: '/user/info',
+    method: 'get',
+    params: { token }
+  })
+}

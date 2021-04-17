@@ -1,41 +1,48 @@
 <template>
   <div class="app-container">
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handlegoback">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-back" @click="handlegoback">
           退回主页
       </el-button>
       <h1>宠物详情页</h1>
     <!--框 -height-主图500 附图400*3 描述200 --共1900-->
-    <div style="width:100%height:1900px">
+    <div style="width:100%">
         <!--主图 和 基本参数 -->
-        <div style="width:80%height:500px;">
-          <div id="imgSearch"  style="width:50%;height:500px;float:left;background-image:url('/img/back.png');background-size:100% 100%;">
+        <div style="display: block; clear: both;height:500px;">
+          &nbsp;
+          <div id="imgSearch"  style="width:500px;height:500px;float:left;background-image:url('/img/back.png');background-size:100% 100%;">
             
           </div>
-          <div style="width:50%;height:500px;float:left;">
-            <span>xxxx:</span><br>
-            <span>xxxx:</span><br>
-            <span>xxxx:</span><br>
-            <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleAdopt">
+          <div style="width:50%;height:500px;float:left;margin:0 auto">
+            <div style="position:relative;top:10%;left:20%;margin:0 auto">
+            <span>宠物详细类型:</span><span id='petStyle'></span><br><br>
+            <span>宠物种类:</span>    <span id='petType'></span><br><br>
+            <span>宠物简称:</span>    <span id='name'></span><br><br>
+            <span>宠物库存数量:</span><span id='petNumber'></span><br><br>
+            <span>宠物简介:</span>    <span id='remark'></span><br><br>
+            <br><br><br><br><br><br>
+            <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-goods" @click="handleAdopt">
               收养此宠物
             </el-button>
+            </div>
+            
           </div>
         </div>
         <!--附图 和 描述信息 -->
-        <div>
+        <div style="width:100%;">
           <h3>宠物介绍</h3>
-          <el-input id='petDetails'  type="textarea" style="width: 70%;height: 200px;"  placeholder="无相关信息" disabled/>
-          <div  id="imgone" style="background-image: url('/img/back.png');background-size: 100% 100%;width: 70%;height: 400px;" >
+          <el-input id='petDetails'  type="textarea" style="width:80%;height: 200px;"  :rows="7" placeholder="无相关信息" disabled/>
+          <div  id="imgone" style="background-image: url('/img/back.png');background-size: 100% 100%;width: 800px;height: 700px;" >
             附图 1
           </div>
-          <div id="imgtwo" style="background-image: url('/img/back.png');background-size: 100% 100%;width: 70%;height: 400px;" >
+          <div id="imgtwo" style="background-image: url('/img/back.png');background-size: 100% 100%;width: 800px;height: 700px;" >
             附图 2
           </div>
-          <div id="imgthree" style="background-image: url('/img/back.png');background-size: 100% 100%;width: 70%;height: 400px;" >
+          <div id="imgthree" style="background-image: url('/img/back.png');background-size: 100% 100%;width:800px;height: 700px;" >
             附图 3
           </div>
         </div>
     </div>
-    <el-dialog :title="收养信息确认" :visible.sync="dialogFormVisible">
+    <el-dialog title="收养信息确认" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm"  :model="temp" :rules="rules"  label-position="left" label-width="160px" style="width: 400px; margin-left:50px;">
         <el-form-item label="收养人联系电话号" prop="telephone">
           <el-input v-model="temp.telephone" />
@@ -142,18 +149,30 @@ export default {
     }
   },
   created() {
-
+    
     
   },
   mounted(){
-    var params=this.$route.params
-    console.log(JSON.stringify(params))
-    this.query=params;
-    this.getList();
+    
+    if(this.$route.params==null||this.$route.params==undefined||this.$route.params=={}){
+
+    }else if(JSON.stringify(this.$route.params)=="{}"){
+      }else{
+      var params=this.$route.params;
+      console.log(JSON.stringify(params))
+      this.query=params;
+      this.getList();
+    }
+    
   },
   methods: {
     getList() {
       //设置属性
+      document.getElementById("petStyle").innerHTML=this.query.petStyle;
+      document.getElementById("petType").innerHTML=this.query.petType;
+      document.getElementById("name").innerHTML=this.query.name;
+      document.getElementById("petNumber").innerHTML=this.query.petNumber;
+      document.getElementById("remark").innerHTML=this.query.remark;
       //设置介绍
       document.getElementById("petDetails").value=this.query.petDetails;
       //设置图片
