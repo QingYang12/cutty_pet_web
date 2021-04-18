@@ -382,6 +382,7 @@ export default {
               duration: 2000
             })
             this.getList()
+            this.$router.go(0);
           })
         }
       })

@@ -48,7 +48,7 @@
           <el-input v-model="temp.telephone" />
         </el-form-item>
         <el-form-item label="收养备注" prop="adoptRemark">
-          <el-input v-model="temp.adoptRemark" type="textarea" style="width: 100%;height: 400px;"  placeholder="请输入收养过程中的备注信息" />
+          <el-input v-model="temp.adoptRemark" type="textarea" rows=7 style="width: 100%;height: 400px;"  placeholder="请输入收养过程中的备注信息" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

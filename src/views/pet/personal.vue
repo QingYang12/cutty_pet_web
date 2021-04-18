@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { fetchUserList, fetchadoptRecordHistoryList,tokenfetchUser } from '@/api/pet'
+import { fetchUserList,fetchcustomerList, fetchadoptRecordHistoryList,tokenfetchUser } from '@/api/pet'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -162,21 +162,35 @@ export default {
       var self=this;
       const hasToken = getToken()
       tokenfetchUser(hasToken).then(response => {
+        debugger
          var usernames= response.data.username;
           self.listLoading = true
-          self.listQuery.pageNum=1;
-          self.listQuery.pageSize=1;
+          var params1={param:{}};
+          params1.pageNum=self.listQuery.page;
+          params1.pageSize=self.listQuery.limit;
           //设置账号
-          self.listQuery.username=usernames;
-          fetchUserList(self.listQuery).then(response => {
-            var personal= response.pageDate.data[0];
-            document.getElementById("username").innerHTML=personal.username;
-            document.getElementById("telephone").innerHTML=personal.telephone;
-            document.getElementById("old").innerHTML=personal.old;
+          params1.param.username=usernames;
+          fetchUserList(params1).then(response => {
+            var o=response.pageDate.data;
+            if(response.pageDate.data.length>0){
+              var personal= response.pageDate.data[0];
+              document.getElementById("username").innerHTML=personal.username;
+              document.getElementById("telephone").innerHTML=personal.telephone;
+              document.getElementById("old").innerHTML=personal.old;
+            }
+          })
+          fetchcustomerList(params1).then(response => {
+            var o=response.pageDate.data;
+            if(response.pageDate.data.length>0){
+              var personal= response.pageDate.data[0];
+              document.getElementById("username").innerHTML=personal.username;
+              document.getElementById("telephone").innerHTML=personal.telephone;
+              document.getElementById("old").innerHTML=personal.old;
+            }
           })
           var params={param:{}};
           params.pageNum=self.listQuery.page;
-          params.pageSize=self.listQuery.limit;
+          params.pageSize=20000;
           //设置账号
           params.param.adoptUsername=usernames;
           fetchadoptRecordHistoryList(params).then(response => {
